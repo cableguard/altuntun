@@ -1,8 +1,8 @@
 ![Altuntun logo banner](./banner.png)
 
-# Altuntun TUN
+# Altuntun
 
-**Altuntun TUN** is an implementation of the [WireGuard<sup>®</sup>](https://www.wireguard.com/) protocol, and consists of two parts:
+**Altuntun** is an implementation of the [WireGuard<sup>®</sup>](https://www.wireguard.com/) protocol, and consists of two parts:
 * The executable `altuntun-cli`, a [userspace WireGuard](https://www.wireguard.com/xplatform/) implementation for Linux and macOS.
 * The library `altuntun` that implements the underlying WireGuard protocol, without the network or tunnel stacks that need to be that need to be implemented in a platform idiomatic way.
 
