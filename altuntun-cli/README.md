@@ -43,5 +43,5 @@ You can use [wg-quick](https://git.zx2c4.com/WireGuard/about/src/tools/man/wg-qu
 - `x86-64` architecture is supported.
 
 ---
-<sub><sub><sub><sub>WireGuard is a registered trademark of Jason A. Donenfeld. Altuntun or endorsed by Jason A. Donenfeld.</sub></sub></sub></sub>
+<sub><sub><sub><sub>WireGuard is a registered trademark of Jason A. Donenfeld. Altuntun is not endorsed by Jason A. Donenfeld.</sub></sub></sub></sub>
 
