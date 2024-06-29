@@ -26,7 +26,7 @@ Most dependencies have been updated except:
 - Error type should support StdError and Display
 
 ## License
-This project is released under the [GPLv2](COPYING).
+The project is licensed under the 3-Clause BSD License.
 More information may be found at [WireGuard.com](https://www.wireguard.com/).**
 
 ### Contribution

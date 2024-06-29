@@ -7,7 +7,7 @@
 * The library `altuntun` that implements the underlying WireGuard protocol, without the network or tunnel stacks that need to be that need to be implemented in a platform idiomatic way.
 
 ## License
-This project is released under the [GPLv2](COPYING).
+The project is licensed under the 3-Clause BSD License.
 More information may be found at [WireGuard.com](https://www.wireguard.com/).**
 
 ### Contribution
