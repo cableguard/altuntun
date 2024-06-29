@@ -6,6 +6,25 @@
 * The executable `altuntun-cli`, a [userspace WireGuard](https://www.wireguard.com/xplatform/) implementation for Linux and macOS.
 * The library `altuntun` that implements the underlying WireGuard protocol, without the network or tunnel stacks that need to be that need to be implemented in a platform idiomatic way.
 
+## Why Altuntun
+I created cableguard using boringtun as a starting point, and I found boringtun to be a barely usable implementation of wireguard. These are my complaints:
+- When boringtun can´t create the file boringtun.out when starting, it fails silently. This normally happen because it is the first time you run, but the first. This is for me unexpected behaviour, poor error handling, and to annoyed me to have to troubleshoot it.
+- It does not support namespaces.
+- Its performance can be improved, but the PR to fix it was pending for several months.
+- I have not seen the maintainers being very responsive by any reasonable measure.
+- The maintainers don´t work actively with the main wireguard C/Linux maintainers.
+
+## Differences between Altuntun and Boringtun
+- I refactored the name of many variables for readability.
+- Applied outstanding PRs to add namespaces, improve performance, and fix the spurious re-keying bug
+Most dependencies have been updated except:
+- clap
+- base64::encode
+
+##Improvements pending
+- Use tokio instead of the current approach (someone tried here: https://github.com/lz1998/wg-rs)
+- Error type should support StdError and Display
+
 ## License
 This project is released under the [GPLv2](COPYING).
 More information may be found at [WireGuard.com](https://www.wireguard.com/).**
