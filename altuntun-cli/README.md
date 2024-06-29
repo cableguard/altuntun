@@ -45,4 +45,4 @@ It may be possible to use with [wg-quick](https://git.zx2c4.com/WireGuard/about/
 - `x86-64` architecture is supported.
 
 ---
-<sub><sub><sub><sub>WireGuard is a registered trademark of Jason A. Donenfeld. altuntunred or endorsed by Jason A. Donenfeld.</sub></sub></sub></sub>
+<sub><sub><sub><sub>WireGuard is a registered trademark of Jason A. Donenfeld. altuntun is not sponsored or endorsed by Jason A. Donenfeld.</sub></sub></sub></sub>

@@ -1,0 +1,12 @@
+/target
+**/*.rs.bk
+.vscode/
+vendor/
+privatekey
+publickey
+dev-account
+Cargo.lock
+/altuntun/Cargo.lock
+/altuntun-cli/Cargo.lock
+output.txt
+
