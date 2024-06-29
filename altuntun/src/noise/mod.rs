@@ -83,7 +83,7 @@ const HANDSHAKE_RESP_SZ: usize = 92;
 const COOKIE_REPLY_SZ: usize = 64;
 const DATA_OVERHEAD_SZ: usize = 32;
 
-#[derive(Debug,Copy, Clone)]
+#[derive(Debug)]
 pub struct HandshakeInit<'a> {
     sender_session_index: u32,
     unencrypted_ephemeral: &'a [u8; 32],
@@ -91,7 +91,7 @@ pub struct HandshakeInit<'a> {
     encrypted_timestamp: &'a [u8],
 }
 
-#[derive(Debug,Copy, Clone)]
+#[derive(Debug)]
 pub struct HandshakeResponse<'a> {
     sender_session_index: u32,
     pub receiver_session_index: u32,
@@ -99,14 +99,14 @@ pub struct HandshakeResponse<'a> {
     encrypted_nothing: &'a [u8],
 }
 
-#[derive(Debug,Copy,Clone)]
+#[derive(Debug)]
 pub struct PacketCookieReply<'a> {
     pub receiver_session_index: u32,
     nonce: &'a [u8],
     encrypted_cookie: &'a [u8],
 }
 
-#[derive(Debug,Copy,Clone)]
+#[derive(Debug)]
 pub struct PacketData<'a> {
     pub receiver_session_index: u32,
     counter: u64,
@@ -114,7 +114,7 @@ pub struct PacketData<'a> {
 }
 
 /// Describes a packet from network
-#[derive(Debug,Copy,Clone)]
+#[derive(Debug)]
 pub enum Packet<'a> {
     HandshakeInit(HandshakeInit<'a>),
     HandshakeResponse(HandshakeResponse<'a>),
@@ -134,7 +134,6 @@ impl Tunn {
 
         Ok(match (packet_type, src.len()) {
                 (HANDSHAKE_INIT_CONSTANT, HANDSHAKE_INIT_SZ) => Packet::HandshakeInit(HandshakeInit {
-                //} TOTAL SIZE WAS 148 (with MAC), now plus 128
                 sender_session_index: u32::from_le_bytes(src[4..8].try_into().unwrap()), // SIZE u32 = 4 times 8, 8-4 = 4 bytes
                 unencrypted_ephemeral: <&[u8; 32] as TryFrom<&[u8]>>::try_from(&src[8..40]) // SIZE u8;32, 40-8 = 32 bytes
                     .expect("Error: Failure checking packet field length"),
@@ -326,6 +325,7 @@ impl Tunn {
             message = "Info: Received handshake_initiation",
             sender_session_index = peer_handshake_init.sender_session_index
         );
+        // ATT: Commenting this matches uncommenting a similar line in a different function. To investigate.
         let peer_static_public: [u8; KEY_LEN] = [0; KEY_LEN];
         let (packet, session) = self.handshake.consume_received_handshake_initiation(peer_handshake_init,dst,peer_static_public)?;
         let index = session.local_index();

@@ -317,7 +317,7 @@ pub struct HalfHandshake {
     pub peer_static_public: [u8; 32],
 }
 
-pub fn consume_received_handshake_peer_2blisted(
+pub fn consume_received_halfhandshake(
     static_private: &x25519::StaticSecret,
     static_public: &x25519::PublicKey,
     packet: &HandshakeInit,
@@ -510,6 +510,7 @@ impl Handshake {
         // key = HMAC(temp, initiator.chaining_key || 0x2)
         let key = b2s_hmac2(&temp, &chaining_key, &[0x02]);
 
+        // ATT: I had the following line commented but I am not sure why
         // let mut peer_static_public_decrypted = [0u8; KEY_LEN];
         // msg.encrypted_static = AEAD(key, 0, initiator.static_public, initiator.hash)
         aead_chacha20_open(

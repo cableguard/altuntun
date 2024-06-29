@@ -22,6 +22,7 @@ Most dependencies have been updated except:
 - base64::encode
 
 ##Improvements pending
+- The handshake packet format is slightly different from wireguard spec, it should be fixed to match
 - Use tokio instead of the current approach (someone tried here: https://github.com/lz1998/wg-rs)
 - Error type should support StdError and Display
 

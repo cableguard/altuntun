@@ -62,7 +62,6 @@ fn main() {
                 .env("WG_UAPI_FD")
                 .help("File descriptor for the user API")
                 .default_value("-1"),
-                // CG: This probably needs to be tested and may be removed as tun devices are named and created internally
             Arg::new("tun-fd")
                 .long("tun-fd")
                 .env("WG_TUN_FD")

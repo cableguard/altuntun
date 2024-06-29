@@ -36,6 +36,11 @@ use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::Arc;
 use std::thread;
 use std::thread::JoinHandle;
+use crate::noise::errors::WireGuardError;
+use crate::noise::handshake::consume_received_halfhandshake;
+use crate::noise::rate_limiter::RateLimiter;
+use crate::noise::{Packet, Tunn, TunnResult};
+use crate::x25519;
 use allowed_ips::AllowedIps;
 use parking_lot::Mutex;
 use peer::{AllowedIP, Peer};
@@ -44,11 +49,7 @@ use rand_core::{OsRng, RngCore};
 use socket2::{Domain, Protocol, Type};
 use tun::TunSocket;
 use dev_lock::{Lock, LockReadGuard};
-use crate::x25519;
-use crate::noise::errors::WireGuardError;
-use crate::noise::rate_limiter::RateLimiter;
-use crate::noise::{Packet, Tunn, TunnResult};
-use crate::noise::handshake::consume_received_handshake_peer_2blisted;
+
 const HANDSHAKE_RATE_LIMIT: u64 = 100; // The number of handshakes per second we can tolerate before using cookies
 const MAX_UDP_SIZE: usize = (1 << 16) - 1;
 const MAX_ITR: usize = 100; // Number of packets to handle per handler call
@@ -308,7 +309,7 @@ impl Device {
 
         // Update an existing peer
         if self.peers.get(&peer_publickey_public_key).is_some() {
-            tracing::info!("Info: Peers are dinamically added and removed so it makes no sense to update them. No actions have been performed");
+            tracing::info!("Info: Modifying peers is not currently supported. No changes were performed");
             return;
         }
 
@@ -328,7 +329,6 @@ impl Device {
         )
         .unwrap();
 
-        // Creation and insertion of a peer
         let peer = Peer::new(tunn, next_peer_index, endpoint, allowed_ips_listed, preshared_key);
 
         let peer = Arc::new(Mutex::new(peer));
@@ -447,7 +447,6 @@ impl Device {
 
         let own_publickey_public_key = x25519::PublicKey::from(&own_staticsecret_private_key);
 
-        // We are using the input value of the function
         let own_key_pair = Some((own_staticsecret_private_key.clone(), own_publickey_public_key));
 
         // x25519 (rightly) doesn't let us expose secret keys for comparison.
@@ -591,8 +590,6 @@ impl Device {
         self.queue.new_event(
         udp.as_raw_fd(),
         Box::new(move |devicebox, threaddata| {
-
-                    // Handler that handles peer_2blisted packets over UDP
                     let mut iter = MAX_ITR;
                     let (own_staticsecret_private_key, own_publickey_public_key ) = devicebox.key_pair.as_ref().expect("Error: Key not set");
                     let rate_limiter = devicebox.rate_limiter.as_ref().unwrap().clone();
@@ -618,16 +615,16 @@ impl Device {
                         };
 
                         let peer = match parsed_packet {
-                            Packet::HandshakeInit(p) => {
-                                consume_received_handshake_peer_2blisted(own_staticsecret_private_key, own_publickey_public_key, &p)
+                            Packet::HandshakeInit(ref p) => {
+                                consume_received_halfhandshake(own_staticsecret_private_key, own_publickey_public_key, &p)
                                     .ok()
                                     .and_then(|halfhandshake| {
                                         devicebox.peers.get(&x25519::PublicKey::from(halfhandshake.peer_static_public))
                                     })
                             }
-                            Packet::HandshakeResponse(p) => devicebox.listbysession_peer_index.get(&(p.receiver_session_index >> 8)),
-                            Packet::PacketCookieReply(p) => devicebox.listbysession_peer_index.get(&(p.receiver_session_index >> 8)),
-                            Packet::PacketData(p) => devicebox.listbysession_peer_index.get(&(p.receiver_session_index >> 8)),
+                            Packet::HandshakeResponse(ref p) => devicebox.listbysession_peer_index.get(&(p.receiver_session_index >> 8)),
+                            Packet::PacketCookieReply(ref p) => devicebox.listbysession_peer_index.get(&(p.receiver_session_index >> 8)),
+                            Packet::PacketData(ref p) => devicebox.listbysession_peer_index.get(&(p.receiver_session_index >> 8)),
                         };
 
                         let peer = match peer {
