@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Cableguard, Inc. All rights reserved.
+// Copyright (c) 2024 Cableguard, Inc. All rights reserved.
 // SPDX-License-Identifier: BSD-3-Clause
 
 // temporary, we need to do some verification around these bindings later

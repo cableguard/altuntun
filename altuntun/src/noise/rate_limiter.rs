@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Cableguard, Inc. All rights reserved.
+// Copyright (c) 2024 Cableguard, Inc. All rights reserved.
 // SPDX-License-Identifier: BSD-3-Clause
 
 use super::handshake::{b2s_hash, b2s_keyed_mac_16, b2s_keyed_mac_16_2, b2s_mac_24};
@@ -58,7 +58,7 @@ impl RateLimiter {
     pub fn new(public_key: &crate::x25519::PublicKey, limit: u64) -> Self {
         let mut secret_key = [0u8; 16];
         OsRng.fill_bytes(&mut secret_key);
-        
+
         RateLimiter {
             nonce_key: Self::rand_bytes(),
             secret_key,
