@@ -8,7 +8,7 @@
 
 ## Why Altuntun
 I created cableguard using boringtun as a starting point, and I found boringtun to be a barely usable implementation of wireguard. These are my complaints:
-- When boringtun can´t create the file boringtun.out when starting, it fails silently. This normally happen because it is the first time you run, but the first. This is for me unexpected behaviour, poor error handling, and to annoyed me to have to troubleshoot it.
+- When boringtun can´t create the file boringtun.out when starting, it fails silently. This normally happen because it is the first time you run, but the second. This is for me unexpected behaviour, poor error handling, and to annoyed me to have to troubleshoot it.
 - It does not support namespaces.
 - Its performance can be improved, but the PR to fix it was pending for several months.
 - I have not seen the maintainers being very responsive by any reasonable measure.
