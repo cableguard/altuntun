@@ -43,10 +43,6 @@ By default the executable is placed in the `./target/release` folder. You can co
 You may want to add to .bashrc these lines:
 - sudo setcap cap_net_admin+epi ./<path>/altuntun-cli
 
-## How to Install from .deb package
-wget https://altuntun.fra1.digitaloceanspaces.com/altuntun-cli_0.89.99_amd64.deb
-sudo apt install ./altuntun-cli_0.92.58_amd64.deb
-
 ## How to Use
 To start a tunnel use:
 `altuntun-cli [-f/--foreground] ADDFROMBORINGTUN`
