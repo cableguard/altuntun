@@ -618,7 +618,6 @@ impl Device {
                         };
 
                         let peer = match parsed_packet {
-                            // ATT: Check the following line and copy what Boringtun does
                             Packet::HandshakeInit(p) => {
                                 consume_received_handshake_peer_2blisted(own_staticsecret_private_key, own_publickey_public_key, &p)
                                     .ok()

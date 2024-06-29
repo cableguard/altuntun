@@ -14,7 +14,7 @@ documentation = "https://docs.rs/cgtun/0.92.58/cgtun/"
 edition = "2021"
 readme = "README.md"
 homepage = "https://altuntun"
-keywords = ["wireguard", "vpn", "blockchain"]
+keywords = ["wireguard", "vpn"]
 
 [dependencies]
 daemonize = "0.5.0"

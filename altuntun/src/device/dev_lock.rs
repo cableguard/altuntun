@@ -4,8 +4,6 @@
 use parking_lot::{Condvar, Mutex, RwLock, RwLockReadGuard};
 use std::ops::Deref;
 
-//ATT: This file has to the same as Boringtun, with refactoring if necessary
-
 /// A special type of read/write lock, that makes the following assumptions:
 /// a) Read access is frequent, and has to be very fast, so we want to hold it indefinitely
 /// b) Write access is very rare (think less than once per second) and can be a bit slower
