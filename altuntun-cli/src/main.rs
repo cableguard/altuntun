@@ -31,7 +31,7 @@ fn check_tun_name(_v: String) -> Result<(), String> {
 fn main() {
     let matches = Command::new("altuntun")
         .version(env!("CARGO_PKG_VERSION"))
-        .author("Vicente Aceituno Canal <vicente@altuntun.org> and Vlad Krasnov <vlad@cloudflare.com> et al, based on Wireguard (C) by Jason Donefeld")
+        .author("Vicente Aceituno Canal <vicente@cableguard.org> and Vlad Krasnov <vlad@cloudflare.com> et al, based on Wireguard (C) by Jason Donefeld")
         .args(&[
             Arg::new("INTERFACE_NAME")
                 .required(true)
@@ -155,20 +155,20 @@ fn main() {
                     // In parent process, child forked ok
                     let mut b = [0u8; 1];
                     if sock2.recv(&mut b).is_ok() && b[0] == 1 {
-                        println!("Info: altuntun started successfully");
+                        println!("Info: Altuntun started successfully");
                         exit(0);
                     } else {
-                         println!("Error: altuntun Failed to start. Check if the capabilities are set and you are running with enough privileges.");
+                         println!("Error: Altuntun Failed to start. Check if the capabilities are set and you are running with enough privileges.");
                         exit(1);
                     }
                 }
                 Outcome::Parent(Err(_e)) => {
-                    println!("Error: altuntun Failed to start. Check if the capabilities are set and you are running with enough privileges.");
+                    println!("Error: Altuntun Failed to start. Check if the capabilities are set and you are running with enough privileges.");
                     exit(1);
                  }
                 Outcome::Child(_) => {
                     // In child process, we'll continue below with code that is common with foreground exec
-                    println!("Info: altuntun started successfully");
+                    println!("Info: Altuntun started successfully");
                 }
             }
 
@@ -213,7 +213,7 @@ fn main() {
     sock1.send(&[1]).unwrap();
     drop(sock1);
 
-    println!("Info: altuntun will hand over to TUN handle");
+    println!("Info: Altuntun will hand over to TUN handle");
 
     // Wait for the device handle to finish processing
     device_handle.wait();

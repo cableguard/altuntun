@@ -3,7 +3,7 @@ name = "altuntun"
 description = "an implementation of the WireGuard® protocol that uses rich online digital tokens for configuration and mutual authentication"
 version = "0.92.58"
 authors = [
-    "Vicente Aceituno Canal <vpn@altuntun.org>",
+    "Vicente Aceituno Canal <vpn@cableguard.org>",
     "Noah Kennedy <nkennedy@cloudflare.com>",
     "Andy Grover <agrover@cloudflare.com>",
     "Jeff Hiner <jhiner@cloudflare.com>",

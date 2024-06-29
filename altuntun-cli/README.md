@@ -1,8 +1,8 @@
-![altuntun logo banner](./banner.png)
+![Altuntun logo banner](./banner.png)
 
-# altuntun TUN
+# Altuntun TUN
 
-**altuntun TUN** is an implementation of the [WireGuard<sup>®</sup>](https://www.wireguard.com/) protocol, and consists of three parts:
+**Altuntun TUN** is an implementation of the [WireGuard<sup>®</sup>](https://www.wireguard.com/) protocol, and consists of three parts:
 
 * The executable `altuntun-cli`, a [userspace WireGuard](https://www.wireguard.com/xplatform/) implementation for Linux and macOS.
 * The library `altuntun` that implements the underlying WireGuard protocol, without the network or tunnel stacks that need to be that need to be implemented in a platform idiomatic way.
@@ -14,7 +14,7 @@ More information may be found at [WireGuard.com](https://www.wireguard.com/).**
 ### Contribution
 Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in the work by you, as defined in the 3-Clause BSD License, shall be licensed as above, without any additional terms or conditions.
 
-If you want to contribute to this project, please contact <vpn@altuntun.org>.
+If you want to contribute to this project, please contact <vpn@cableguard.org>.
 
 ## How to Install from Source
 - sudo apt install pkg-config
@@ -45,4 +45,4 @@ It may be possible to use with [wg-quick](https://git.zx2c4.com/WireGuard/about/
 - `x86-64` architecture is supported.
 
 ---
-<sub><sub><sub><sub>WireGuard is a registered trademark of Jason A. Donenfeld. altuntun is not sponsored or endorsed by Jason A. Donenfeld.</sub></sub></sub></sub>
+<sub><sub><sub><sub>WireGuard is a registered trademark of Jason A. Donenfeld. Altuntun is not sponsored or endorsed by Jason A. Donenfeld.</sub></sub></sub></sub>

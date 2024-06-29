@@ -1,7 +1,7 @@
 // Copyright (c) 2023 Cableguard, Inc. All rights reserved.
 // SPDX-License-Identifier: BSD-3-Clause
 
-// This module contains some integration tests for altuntun
+// This module contains some integration tests for Altuntun
 // Those tests require docker and sudo privileges to run
 #[cfg(all(test, not(target_os = "macos")))]
 mod tests {

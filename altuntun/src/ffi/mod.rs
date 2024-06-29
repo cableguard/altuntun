@@ -5,7 +5,7 @@
 // pointers and buffers/lengths to these, ok?
 #![allow(clippy::missing_safety_doc)]
 
-//! C bindings for the altuntun library
+//! C bindings for the Altuntun library
 use super::noise::{Tunn, TunnResult};
 use crate::x25519::{PublicKey, StaticSecret};
 use base64::decode as base64decode;
