@@ -1,4 +1,4 @@
-![AltunTun logo banner](./banner.png)
+no![AltunTun logo banner](./banner.png)
 
 # AltunTun
 
@@ -46,7 +46,7 @@ You may want to add to .bashrc these lines:
 
 ## How to Use
 To start a tunnel use:
-`altuntun-cli [-f/--foreground] ADDFROMBORINGTUN`
+`altuntun-cli [-f/--foreground] TUNNAME`
 
 `altuntun` will drop privileges when started. When privileges are dropped it is not possible to set `fwmark`. If `fwmark` is required, such as when using `wg-quick`, run with `--disable-drop-privileges` or set the environment variable `WG_SUDO=1`.
 You will need to give the executable the `CAP_NET_ADMIN` capability using: `sudo setcap cap_net_admin+epi altuntun`.
