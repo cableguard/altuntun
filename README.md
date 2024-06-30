@@ -1,12 +1,12 @@
-![Altuntun logo banner](./banner.png)
+![AltunTun logo banner](./banner.png)
 
-# Altuntun
+# AltunTun
 
-**Altuntun** is an implementation of the [WireGuard<sup>®</sup>](https://www.wireguard.com/) protocol, and consists of two parts:
+**AltunTun** is an implementation of the [WireGuard<sup>®</sup>](https://www.wireguard.com/) protocol, and consists of two parts:
 * The executable `altuntun-cli`, a [userspace WireGuard](https://www.wireguard.com/xplatform/) implementation for Linux and macOS.
 * The library `altuntun` that implements the underlying WireGuard protocol, without the network or tunnel stacks that need to be that need to be implemented in a platform idiomatic way.
 
-## Why Altuntun
+## Why AltunTun
 I created cableguard using boringtun as a starting point, and I found boringtun to be a barely usable implementation of wireguard. These are my complaints:
 - When boringtun can´t create the file boringtun.out when starting, it fails silently. This normally happens because it is not the first time you run, but the second or later, so file already exists. This is for me unexpected behaviour, poor error handling, and it annoyed me to have to troubleshoot it.
 - It does not support namespaces.
@@ -14,7 +14,7 @@ I created cableguard using boringtun as a starting point, and I found boringtun 
 - I have not seen the maintainers being very responsive by any reasonable measure.
 - The maintainers don´t work actively with the main wireguard C/Linux maintainers.
 
-## Differences between Altuntun and Boringtun
+## Differences between AltunTun and Boringtun
 - I refactored the name of many variables for readability.
 - Applied outstanding PRs to add namespaces, improve performance, and fix the spurious re-keying bug
 Most dependencies have been updated except:
@@ -59,4 +59,4 @@ You can use [wg-quick](https://git.zx2c4.com/WireGuard/about/src/tools/man/wg-qu
 - `x86-64` architecture is supported.
 
 ---
-<sub><sub><sub><sub>WireGuard is a registered trademark of Jason A. Donenfeld. Altuntun is not endorsed by Jason A. Donenfeld.</sub></sub></sub></sub>
+<sub><sub><sub><sub>WireGuard is a registered trademark of Jason A. Donenfeld. AltunTun is not endorsed by Jason A. Donenfeld.</sub></sub></sub></sub>

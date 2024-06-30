@@ -1,14 +1,12 @@
 // Copyright (c) 2024 Cableguard, Inc. All rights reserved.
 // SPDX-License-Identifier: BSD-3-Clause
 
-// This module contains some integration tests for Altuntun
+// This module contains some integration tests for AltunTun
 // Those tests require docker and sudo privileges to run
 #[cfg(all(test, not(target_os = "macos")))]
 mod tests {
     use crate::device::{DeviceConfig, DeviceHandle};
     use crate::x25519::{PublicKey, StaticSecret};
-    use base64::encode as base64encode;
-    use hex::encode as encode_hex;
     use rand_core::OsRng;
     use ring::rand::{SystemRandom};
     // use ring::rand::{SecureRandom, SystemRandom};
@@ -20,6 +18,8 @@ mod tests {
     use std::sync::atomic::{AtomicUsize, Ordering};
     use std::sync::Arc;
     use std::thread;
+    use base64::encode as base64encode;
+    use hex::encode as encode_hex;
 
     static NEXT_IFACE_IDX: AtomicUsize = AtomicUsize::new(100); // utun 100+ should be vacant during testing on CI
     static NEXT_PORT: AtomicUsize = AtomicUsize::new(61111); // Use ports starting with 61111, hoping we don't run into a taken port 🤷

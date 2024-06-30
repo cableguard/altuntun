@@ -1,8 +1,8 @@
-![Altuntun logo banner](./banner.png)
+![AltunTun logo banner](./banner.png)
 
-# Altuntun
+# AltunTun
 
-**Altuntun** is an implementation of the [WireGuard<sup>®</sup>](https://www.wireguard.com/) protocol, and consists of two parts:
+**AltunTun** is an implementation of the [WireGuard<sup>®</sup>](https://www.wireguard.com/) protocol, and consists of two parts:
 * The executable `altuntun-cli`, a [userspace WireGuard](https://www.wireguard.com/xplatform/) implementation for Linux and macOS.
 * The library `altuntun` that implements the underlying WireGuard protocol, without the network or tunnel stacks that need to be that need to be implemented in a platform idiomatic way.
 
@@ -43,6 +43,6 @@ You can use [wg-quick](https://git.zx2c4.com/WireGuard/about/src/tools/man/wg-qu
 - `x86-64` architecture is supported.
 
 ---
-<sub><sub><sub><sub>WireGuard is a registered trademark of Jason A. Donenfeld. Altuntun is not endorsed by Jason A. Donenfeld.</sub></sub></sub></sub>
+<sub><sub><sub><sub>WireGuard is a registered trademark of Jason A. Donenfeld. AltunTun is not endorsed by Jason A. Donenfeld.</sub></sub></sub></sub>
 
 
