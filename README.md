@@ -4,7 +4,7 @@
 
 **AltunTun** is an implementation of the [WireGuard<sup>®</sup>](https://www.wireguard.com/) protocol, and consists of two parts:
 * The executable `altuntun-cli`, a [userspace WireGuard](https://www.wireguard.com/xplatform/) implementation for Linux and macOS.
-* The library `altuntun` that implements the underlying WireGuard protocol, without the network or tunnel stacks that need to be that need to be implemented in a platform idiomatic way.
+* The library `altuntun` that implements the underlying WireGuard protocol, without the network or tunnel stacks that need to be implemented in a platform idiomatic way.
 
 ## Why AltunTun
 I created cableguard using boringtun as a starting point, and I found boringtun to be a barely usable implementation of wireguard. These are my complaints:
