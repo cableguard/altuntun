@@ -58,7 +58,7 @@ pub struct Timers {
     /// Did we receive data without sending anything back?
     want_keepalive: bool,
     /// Did we send data without hearing back?
-    want_handshake: bool,
+    want_handshake_since: Option<Duration>,
     persistent_keepalive: usize,
     /// Should this timer call reset rr function (if not a shared rr instance)
     pub(super) should_reset_rr: bool,
@@ -72,7 +72,7 @@ impl Timers {
             timers: Default::default(),
             session_timers: Default::default(),
             want_keepalive: Default::default(),
-            want_handshake: Default::default(),
+            want_handshake_since: Default::default(),
             persistent_keepalive: usize::from(persistent_keepalive.unwrap_or(0)),
             should_reset_rr: reset_rr,
         }
@@ -89,7 +89,7 @@ impl Timers {
         for t in &mut self.timers[..] {
             *t = now;
         }
-        self.want_handshake = false;
+        self.want_handshake_since = None;
         self.want_keepalive = false;
     }
 }
