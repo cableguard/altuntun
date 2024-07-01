@@ -133,6 +133,16 @@ impl Tunn {
         let packet_type = u32::from_le_bytes(src[0..4].try_into().unwrap());
 
         Ok(match (packet_type, src.len()) {
+                /* Wireguard spec format Initiator to Responder
+                    u8 message_type
+                    u8 reserved_zero[3]
+                    u32 sender_index
+                    u8 unencrypted_ephemeral[32]
+                    u8 encrypted_static[AEAD_LEN(32)]
+                    u8 encrypted_timestamp[AEAD_LEN(12)]
+                    u8 mac1[16]
+                    u8 mac2[16]
+                */
                 (HANDSHAKE_INIT_CONSTANT, HANDSHAKE_INIT_SZ) => Packet::HandshakeInit(HandshakeInit {
                 sender_session_index: u32::from_le_bytes(src[4..8].try_into().unwrap()), // SIZE u32 = 4 times 8, 8-4 = 4 bytes
                 unencrypted_ephemeral: <&[u8; 32] as TryFrom<&[u8]>>::try_from(&src[8..40]) // SIZE u8;32, 40-8 = 32 bytes
@@ -140,6 +150,16 @@ impl Tunn {
                 encrypted_static: &src[40..88], // SIZE u8;32, 88-40 = 48 bytes, seems too big for the spec u8 encrypted_static[AEAD_LEN(32)]
                 encrypted_timestamp: &src[88..116], // SIZE u8;12, 116-88 = 28 bytes, seems too big for the spec u8 encrypted_timestamp[AEAD_LEN(12)]
                 }),
+                /* Wireguard spec Responder to Initiator
+                    u8 message_type
+                    u8 reserved_zero[3]
+                    u32 sender_index
+                    u32 receiver_index
+                    u8 unencrypted_ephemeral[32]
+                    u8 encrypted_nothing[AEAD_LEN(0)]
+                    u8 mac1[16]
+                    u8 mac2[16]
+                */
                 (HANDSHAKE_RESP, HANDSHAKE_RESP_SZ) => Packet::HandshakeResponse(HandshakeResponse {
                 //} TOTAL SIZE WAS 92 (with MAC), now plus 128
                 sender_session_index: u32::from_le_bytes(src[4..8].try_into().unwrap()), // SIZE u32 = 4 times 8, 8-4 = 4 bytes
@@ -148,11 +168,25 @@ impl Tunn {
                     .expect("Error: Failure checking packet field length"),
                 encrypted_nothing: &src[44..60], // SIZE 60-44 = 16 bytes but u8 encrypted_nothing[AEAD_LEN(0)]
             }),
+            /* Wireguard spec data packet
+                u8 message_type
+                u8 reserved_zero[3]
+                u32 receiver_index
+                u64 counter
+                u8 encrypted_encapsulated_packet[]
+            */
             (COOKIE_REPLY, COOKIE_REPLY_SZ) => Packet::PacketCookieReply(PacketCookieReply {
                 receiver_session_index: u32::from_le_bytes(src[4..8].try_into().unwrap()),
                 nonce: &src[8..32],
                 encrypted_cookie: &src[32..64],
             }),
+            /* Wireguard spec data packet
+                u8 message_type
+                u8 reserved_zero[3]
+                u32 receiver_index
+                u64 counter
+                u8 encrypted_encapsulated_packet[]
+            */
             (DATA, DATA_OVERHEAD_SZ..=std::usize::MAX) => Packet::PacketData(PacketData {
                 receiver_session_index: u32::from_le_bytes(src[4..8].try_into().unwrap()),
                 counter: u64::from_le_bytes(src[8..16].try_into().unwrap()),
