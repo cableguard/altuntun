@@ -1,9 +1,6 @@
 #[derive(Debug)]
 pub(crate) struct KeyBytes(pub [u8; 32]);
 
-// ATT: I can't see how this improves the handling for keys,
-// strong candidate for removal
-
 impl std::str::FromStr for KeyBytes {
     type Err = &'static str;
 
