@@ -186,9 +186,17 @@ fn api_get(writerbufferdevice: &mut BufWriter<&UnixStream>, thisnetworkdevice: &
             writeln!(writerbufferdevice, "allowed_ip={}/{}", ip, cidr);
         }
 
-        if let Some(time) = peer.duration_since_last_handshake() {
-            writeln!(writerbufferdevice, "last_handshake_time_sec={}", time.as_secs());
-            writeln!(writerbufferdevice, "last_handshake_time_nsec={}", time.subsec_nanos());
+        if let Some(last_handshake_time) = peer.duration_since_last_handshake() {
+            writeln!(
+                writerbufferdevice,
+                "last_handshake_time_sec={}",
+                last_handshake_time.as_secs()
+            );
+            writeln!(
+                writerbufferdevice,
+                "last_handshake_time_nsec={}",
+                last_handshake_time.subsec_nanos()
+            );
         }
 
         let (_, tx_bytes, rx_bytes, ..) = peer.tunnel.stats();

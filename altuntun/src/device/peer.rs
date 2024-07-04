@@ -157,6 +157,10 @@ impl Peer {
         self.tunnel.duration_since_last_handshake()
     }
 
+    pub fn last_handshake_duration(&self) -> Option<std::time::Duration> {
+        self.tunnel.last_handshake_duration()
+    }
+
     pub fn persistent_keepalive(&self) -> Option<u16> {
         self.tunnel.persistent_keepalive()
     }
