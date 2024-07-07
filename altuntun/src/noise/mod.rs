@@ -81,7 +81,13 @@ const NP_DATA: MessageType = 4;
 type ReservedZeroType = u32;
 const NP_RESERVED_ZERO: ReservedZeroType = 0;
 
-const HANDSHAKE_INIT_SZ: usize = 148;
+const HANDSHAKE_INIT_SZ: usize = 148; // ATT: This is an addition of the size of fields, but
+// u8 encrypted_static[AEAD_LEN(32)] is 48 instead of 32 bytes as it should be to be Wireguard
+// u8 encrypted_timestamp[AEAD_LEN(12)] // is 28 instead of 12 bytes as it should be to be Wireguard
+// u8 mac1[16] is elapsed in code but the size is taken into account
+// u8 mac2[16] /is elapsed in code but the size is taken into account
+// If encrypted_static is 32 long and encrypted_timestamp is 12 long as per spec, HANDSHAKE_INIT_SZ is 116 instead of 148
+
 const HANDSHAKE_RESP_SZ: usize = 92;
 const COOKIE_REPLY_SZ: usize = 64;
 const DATA_OVERHEAD_SZ: usize = 32;
@@ -156,7 +162,7 @@ impl Tunn {
                 unencrypted_ephemeral: <&[u8; 32] as TryFrom<&[u8]>>::try_from(&src[12..44]) // SIZE u8;32, 40-8 = 32 bytes
                     .expect("Error: Failure checking packet field length"),
                 // u8 encrypted_nothing[AEAD_LEN(0)] Maybe Compliant
-                encrypted_nothing: &src[44..60], // SIZE 60-44 = 16 bytes but u8 encrypted_nothing[AEAD_LEN(0)]
+                encrypted_nothing: &src[44..60], // SIZE 60-44 = 16 bytes but u8 encrypted_nothing[AEAD_LEN(0)] AEAD_LEN(0) is equal to 16
                 // u8 mac1[16] // Missing
                 // u8 mac2[16] // Missing
             }),
