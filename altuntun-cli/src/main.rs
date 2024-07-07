@@ -30,7 +30,7 @@ fn check_tun_name(_v: String) -> Result<(), String> {
 fn main() {
     let matches = Command::new("altuntun")
         .version(env!("CARGO_PKG_VERSION"))
-        .author("Vicente Aceituno Canal <vicente@cableguard.org> and Vlad Krasnov <vlad@cloudflare.com> et al, based on Wireguard (C) by Jason Donefeld")
+        .author("Vicente Aceituno Canal <vpn@cableguard.org> and Vlad Krasnov <vlad@cloudflare.com> et al, based on Wireguard (C) by Jason Donefeld")
         .args(&[
             Arg::new("INTERFACE_NAME")
                 .required(true)
