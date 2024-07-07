@@ -81,12 +81,11 @@ const NP_DATA: MessageType = 4;
 type ReservedZeroType = u32;
 const NP_RESERVED_ZERO: ReservedZeroType = 0;
 
-const HANDSHAKE_INIT_SZ: usize = 148; // ATT: This is an addition of the size of fields, but
-// u8 encrypted_static[AEAD_LEN(32)] is 48 instead of 32 bytes as it should be to be Wireguard
-// u8 encrypted_timestamp[AEAD_LEN(12)] // is 28 instead of 12 bytes as it should be to be Wireguard
-// u8 mac1[16] is elapsed in code but the size is taken into account
-// u8 mac2[16] /is elapsed in code but the size is taken into account
-// If encrypted_static is 32 long and encrypted_timestamp is 12 long as per spec, HANDSHAKE_INIT_SZ is 116 instead of 148
+// ChaCha20 Authenticated Encryption with Associated Data constant
+type ChaCha20AEADType = u32;
+const AEAD_LEN: ChaCha20AEADType = 16;
+
+const HANDSHAKE_INIT_SZ: usize = 148;
 
 const HANDSHAKE_RESP_SZ: usize = 92;
 const COOKIE_REPLY_SZ: usize = 64;
@@ -143,43 +142,27 @@ impl Tunn {
 
         Ok(match (packet_type, src.len()) {
                 (NP_HANDSHAKE_INIT, HANDSHAKE_INIT_SZ) => Packet::HandshakeInit(HandshakeInit {
-                // ATT: Comparison with Wireguard spec format Initiator to Responder
                 sender_session_index: u32::from_le_bytes(src[4..8].try_into().unwrap()), // SIZE u32 = 4 times 8, 8-4 = 4 bytes
                 unencrypted_ephemeral: <&[u8; 32] as TryFrom<&[u8]>>::try_from(&src[8..40]) // SIZE u8;32, 40-8 = 32 bytes
                     .expect("Error: Failure checking packet field length"),
-                // u8 encrypted_static[AEAD_LEN(32)] // Not Compliant, it is 48 instead of 32 bytes
-                encrypted_static: &src[40..88], // SIZE u8;32, 88-40 = 48 bytes, seems too big for the spec u8 encrypted_static[AEAD_LEN(32)]
-                // u8 encrypted_timestamp[AEAD_LEN(12)] // // Not Compliant, it is 28 instead of 12 bytes
-                encrypted_timestamp: &src[88..116], // SIZE u8;12, 116-88 = 28 bytes, seems too big for the spec u8 encrypted_timestamp[AEAD_LEN(12)]
-                // u8 mac1[16] // Missing
-                // u8 mac2[16] // Missing
+                encrypted_static: &src[40..88], // SIZE u8;32, 88-40 = 48 bytes = AEAD_LEN + 32
+                encrypted_timestamp: &src[88..116], // SIZE u8;12, 116-88 = AEAD_LEN + 12
                 }),
                 (NP_HANDSHAKE_RESP, HANDSHAKE_RESP_SZ) => Packet::HandshakeResponse(HandshakeResponse {
-                // ATT: Comparison with Wireguard spec format Responder to Initiator
                 sender_session_index: u32::from_le_bytes(src[4..8].try_into().unwrap()), // SIZE u32 = 4 times 8, 8-4 = 4 bytes
-                // u32 receiver_index // Maybe Compliant
                 receiver_session_index: u32::from_le_bytes(src[8..12].try_into().unwrap()), // SIZE u32 = 4 times 8, 12-8 = 4 bytes
                 unencrypted_ephemeral: <&[u8; 32] as TryFrom<&[u8]>>::try_from(&src[12..44]) // SIZE u8;32, 40-8 = 32 bytes
                     .expect("Error: Failure checking packet field length"),
-                // u8 encrypted_nothing[AEAD_LEN(0)] Maybe Compliant
-                encrypted_nothing: &src[44..60], // SIZE 60-44 = 16 bytes but u8 encrypted_nothing[AEAD_LEN(0)] AEAD_LEN(0) is equal to 16
-                // u8 mac1[16] // Missing
-                // u8 mac2[16] // Missing
+                encrypted_nothing: &src[44..60], // SIZE 60-44 = AEAD_LEN + 0
             }),
             (NP_COOKIE_REPLY, COOKIE_REPLY_SZ) => Packet::PacketCookieReply(PacketCookieReply {
-                // u32 receiver_index // Maybe Compliant
                 receiver_session_index: u32::from_le_bytes(src[4..8].try_into().unwrap()),
-                //  u64 counter // Maybe Compliant
                 nonce: &src[8..32],
-                // u8 encrypted_encapsulated_packet[] // Maybe Compliant
                 encrypted_cookie: &src[32..64],
             }),
             (NP_DATA, DATA_OVERHEAD_SZ..=std::usize::MAX) => Packet::PacketData(PacketData {
-                // u32 receiver_index // Maybe Compliant
                 receiver_session_index: u32::from_le_bytes(src[4..8].try_into().unwrap()),
-                //  u64 counter // Maybe Compliant
                 counter: u64::from_le_bytes(src[8..16].try_into().unwrap()),
-                 // u8 encrypted_encapsulated_packet[] // Maybe Compliant
                 encrypted_encapsulated_packet: &src[16..],
             }),
             _ => return Err(WireGuardError::InvalidPacket),
