@@ -200,15 +200,17 @@ impl Session {
 
         let sending_key_counter = self.sending_key_counter.fetch_add(1, Ordering::Relaxed) as u64;
 
-        let (message_type, rest) = dst.split_at_mut(4);
+        let (message_type, rest) = dst.split_at_mut(1);
+        let (reserved_zero, rest) = rest.split_at_mut(3);
         let (own_index, rest) = rest.split_at_mut(4);
         let (counter, data) = rest.split_at_mut(8);
 
-        message_type.copy_from_slice(&super::DATA.to_le_bytes());
+        message_type.copy_from_slice(&super::NP_DATA.to_le_bytes());
+        reserved_zero.copy_from_slice(&super::NP_RESERVED_ZERO.to_le_bytes());
         own_index.copy_from_slice(&self.sending_index.to_le_bytes());
         counter.copy_from_slice(&sending_key_counter.to_le_bytes());
 
-        // TODO: spec requires padding to 16 bytes, but actually works fine without it
+        // ATT: Wireguard spec requires padding to 16 bytes, but actually works fine without it
         let n = {
             let mut nonce = [0u8; 12];
             nonce[4..12].copy_from_slice(&sending_key_counter.to_le_bytes());

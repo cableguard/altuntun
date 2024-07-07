@@ -127,14 +127,16 @@ impl RateLimiter {
             return Err(WireGuardError::DestinationBufferTooSmall);
         }
 
-        let (message_type, rest) = dst.split_at_mut(4);
+        let (message_type, rest) = dst.split_at_mut(1);
+        let (reserved_zero, rest) = rest.split_at_mut(3);
         let (own_index, rest) = rest.split_at_mut(4);
         let (nonce, rest) = rest.split_at_mut(24);
         let (encrypted_cookie, _) = rest.split_at_mut(16 + 16);
 
         // msg.message_type = 3
+        message_type.copy_from_slice(&super::NP_COOKIE_REPLY.to_le_bytes());
         // msg.reserved_zero = { 0, 0, 0 }
-        message_type.copy_from_slice(&super::COOKIE_REPLY.to_le_bytes());
+        reserved_zero.copy_from_slice(&super::NP_RESERVED_ZERO.to_le_bytes());
         // msg.own_index = little_endian(initiator.sender_session_index)
         own_index.copy_from_slice(&idx.to_le_bytes());
         nonce.copy_from_slice(&self.nonce()[..]);

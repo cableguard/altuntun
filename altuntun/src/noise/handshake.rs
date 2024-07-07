@@ -716,7 +716,8 @@ impl Handshake {
             return Err(WireGuardError::DestinationBufferTooSmall);
         }
 
-        let (message_type, rest) = dst.split_at_mut(4);
+        let (message_type, rest) = dst.split_at_mut(1);
+        let (reserved_zero, rest) = rest.split_at_mut(3);
         let (sender_index, rest) = rest.split_at_mut(4);
         let (unencrypted_ephemeral, rest) = rest.split_at_mut(32);
         let (encrypted_static, rest) = rest.split_at_mut(32 + 16);
@@ -737,8 +738,9 @@ impl Handshake {
         let ephemeral_private = x25519::ReusableSecret::random_from_rng(OsRng);
 
         // msg.message_type = 1
+        message_type.copy_from_slice(&super::NP_HANDSHAKE_INIT.to_le_bytes());
         // msg.reserved_zero = { 0, 0, 0 }
-        message_type.copy_from_slice(&super::HANDSHAKE_INIT_CONSTANT.to_le_bytes());
+        reserved_zero.copy_from_slice(&super::NP_RESERVED_ZERO.to_le_bytes());
 
         // msg.sender_index = little_endian(initiator.sender_index)
         sender_index.copy_from_slice(&local_index.to_le_bytes());
@@ -828,7 +830,8 @@ impl Handshake {
             }
         };
 
-        let (message_type, rest) = dst.split_at_mut(4);
+        let (message_type, rest) = dst.split_at_mut(1);
+        let (reserved_zero, rest) = rest.split_at_mut(3);
         let (sender_index, rest) = rest.split_at_mut(4);
         let (own_index, rest) = rest.split_at_mut(4);
         let (unencrypted_ephemeral, rest) = rest.split_at_mut(32);
@@ -838,8 +841,9 @@ impl Handshake {
         let ephemeral_private = x25519::ReusableSecret::random_from_rng(OsRng);
         let local_index = self.inc_index();
         // msg.message_type = 2
+        message_type.copy_from_slice(&super::NP_HANDSHAKE_RESP.to_le_bytes());
         // msg.reserved_zero = { 0, 0, 0 }
-        message_type.copy_from_slice(&super::HANDSHAKE_RESP.to_le_bytes());
+        reserved_zero.copy_from_slice(&super::NP_RESERVED_ZERO.to_le_bytes());
         // msg.sender_index = little_endian(responder.sender_index)
         sender_index.copy_from_slice(&local_index.to_le_bytes());
         // msg.own_index = little_endian(initiator.sender_index)

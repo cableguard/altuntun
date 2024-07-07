@@ -73,10 +73,13 @@ pub struct Tunn {
 }
 
 type MessageType = u32;
-const HANDSHAKE_INIT_CONSTANT: MessageType = 1;
-const HANDSHAKE_RESP: MessageType = 2;
-const COOKIE_REPLY: MessageType = 3;
-const DATA: MessageType = 4;
+const NP_HANDSHAKE_INIT: MessageType = 1;
+const NP_HANDSHAKE_RESP: MessageType = 2;
+const NP_COOKIE_REPLY: MessageType = 3;
+const NP_DATA: MessageType = 4;
+
+type ReservedZeroType = u32;
+const NP_RESERVED_ZERO: ReservedZeroType = 0;
 
 const HANDSHAKE_INIT_SZ: usize = 148;
 const HANDSHAKE_RESP_SZ: usize = 92;
@@ -133,13 +136,9 @@ impl Tunn {
         let packet_type = u32::from_le_bytes(src[0..4].try_into().unwrap());
 
         Ok(match (packet_type, src.len()) {
-                (HANDSHAKE_INIT_CONSTANT, HANDSHAKE_INIT_SZ) => Packet::HandshakeInit(HandshakeInit {
+                (NP_HANDSHAKE_INIT, HANDSHAKE_INIT_SZ) => Packet::HandshakeInit(HandshakeInit {
                 // ATT: Comparison with Wireguard spec format Initiator to Responder
-                // u8 message_type // Missing
-                // u8 reserved_zero[3] // Missing
-                // u32 sender_index // Starts at byte count 4 should it seems Compliant
                 sender_session_index: u32::from_le_bytes(src[4..8].try_into().unwrap()), // SIZE u32 = 4 times 8, 8-4 = 4 bytes
-                // u8 unencrypted_ephemeral[32] // Compliant
                 unencrypted_ephemeral: <&[u8; 32] as TryFrom<&[u8]>>::try_from(&src[8..40]) // SIZE u8;32, 40-8 = 32 bytes
                     .expect("Error: Failure checking packet field length"),
                 // u8 encrypted_static[AEAD_LEN(32)] // Not Compliant, it is 48 instead of 32 bytes
@@ -149,15 +148,11 @@ impl Tunn {
                 // u8 mac1[16] // Missing
                 // u8 mac2[16] // Missing
                 }),
-                (HANDSHAKE_RESP, HANDSHAKE_RESP_SZ) => Packet::HandshakeResponse(HandshakeResponse {
+                (NP_HANDSHAKE_RESP, HANDSHAKE_RESP_SZ) => Packet::HandshakeResponse(HandshakeResponse {
                 // ATT: Comparison with Wireguard spec format Responder to Initiator
-                // u8 message_type // Missing
-                // u8 reserved_zero[3] // Missing
-                // u32 sender_index // Starts at byte count 4 should it seems Compliant
                 sender_session_index: u32::from_le_bytes(src[4..8].try_into().unwrap()), // SIZE u32 = 4 times 8, 8-4 = 4 bytes
                 // u32 receiver_index // Maybe Compliant
                 receiver_session_index: u32::from_le_bytes(src[8..12].try_into().unwrap()), // SIZE u32 = 4 times 8, 12-8 = 4 bytes
-                 // u8 unencrypted_ephemeral[32] // Compliant
                 unencrypted_ephemeral: <&[u8; 32] as TryFrom<&[u8]>>::try_from(&src[12..44]) // SIZE u8;32, 40-8 = 32 bytes
                     .expect("Error: Failure checking packet field length"),
                 // u8 encrypted_nothing[AEAD_LEN(0)] Maybe Compliant
@@ -165,10 +160,7 @@ impl Tunn {
                 // u8 mac1[16] // Missing
                 // u8 mac2[16] // Missing
             }),
-            (COOKIE_REPLY, COOKIE_REPLY_SZ) => Packet::PacketCookieReply(PacketCookieReply {
-                // ATT: Comparison with Wireguard spec data packet
-                // u8 message_type // Missing
-                // u8 reserved_zero[3] // Missing
+            (NP_COOKIE_REPLY, COOKIE_REPLY_SZ) => Packet::PacketCookieReply(PacketCookieReply {
                 // u32 receiver_index // Maybe Compliant
                 receiver_session_index: u32::from_le_bytes(src[4..8].try_into().unwrap()),
                 //  u64 counter // Maybe Compliant
@@ -176,10 +168,7 @@ impl Tunn {
                 // u8 encrypted_encapsulated_packet[] // Maybe Compliant
                 encrypted_cookie: &src[32..64],
             }),
-            (DATA, DATA_OVERHEAD_SZ..=std::usize::MAX) => Packet::PacketData(PacketData {
-                // ATT: Comparison with Wireguard spec data packet
-                // u8 message_type // Missing
-                // u8 reserved_zero[3] // Missing
+            (NP_DATA, DATA_OVERHEAD_SZ..=std::usize::MAX) => Packet::PacketData(PacketData {
                 // u32 receiver_index // Maybe Compliant
                 receiver_session_index: u32::from_le_bytes(src[4..8].try_into().unwrap()),
                 //  u64 counter // Maybe Compliant
