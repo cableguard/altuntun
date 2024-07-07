@@ -1,7 +1,7 @@
 [package]
 name = "altuntun-cli"
 description = "an implementation of the an implementation of the WireGuard® protocol that uses rich online digital tokens for configuration and mutual authenticationthat uses rich online digital tokens for configuration and mutual authentication"
-version = "0.92.58"
+version = "0.94.62"
 authors = [
     "Vicente Aceituno Canal <vpn@cableguard.org>",
     "Noah Kennedy <nkennedy@cloudflare.com>",
@@ -9,8 +9,8 @@ authors = [
     "Jeff Hiner <jhiner@cloudflare.com>",
 ]
 license = "BSD-3-Clause"
-repository = "https://github.com/cableguard/cgtun"
-documentation = "https://docs.rs/cgtun/0.92.58/cgtun/"
+repository = "https://github.com/cableguard/altuntun"
+documentation = "https://docs.rs/altuntun/0.94.62/altuntun/"
 edition = "2021"
 readme = "README.md"
 homepage = "https://altuntun"
@@ -36,6 +36,6 @@ sha2 = "0.10.7"
 zeroize= "1.5.0"
 
 [dependencies.altuntun]
-version = "0.92.58"
+version = "0.94.62"
 path = "../altuntun"
 features = ["device"]
