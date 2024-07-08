@@ -2,7 +2,7 @@
 
 ![AltunTun logo banner](./banner.png)
 
-**AltunTun** is an implementation of the [WireGuard®(https://www.wireguard.com/) protocol, and consists of two parts:
+**AltunTun** is an implementation of the [WireGuard®](https://www.wireguard.com/) protocol, and consists of two parts:
 
 * The executable `altuntun-cli`, a [userspace WireGuard](https://www.wireguard.com/xplatform/) implementation for Linux and macOS.
 * The library `altuntun` that implements the underlying WireGuard protocol, without the network or tunnel stacks that need to be implemented in a platform idiomatic way.
@@ -46,6 +46,7 @@ If you want to contribute to this project, please contact <vpn@cableguard.org>.
 * sudo apt install pkg-config
 * git clone [https://github.com/cableguard/altuntun.git](https://github.com/cableguard/altuntun.git)
 * cargo build --bin altuntun-cli --release
+* 
 By default the executable is placed in the `./target/release` folder. You can copy it to a desired location manually, or install it using `cargo install --bin altuntun --path .`.
 
 You may want to add to .bashrc these lines:
