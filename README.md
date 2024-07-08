@@ -13,7 +13,7 @@ I created cableguard using boringtun as a starting point, and I found boringtun 
 
 * When boringtun can´t create the file boringtun.out when starting, it fails silently. This normally happens because it is not the first time you run it, but the second or later, so the file already exists. This is for me unexpected behaviour, poor error handling, and it annoyed me to have to troubleshoot it.
 * It does not support namespaces.
-* Its performance can be improved, but the PR to fix it was pending for several months.
+* Its default performance can be improved, but the PR to fix it was pending for several months.
 * I have not seen the maintainers being very responsive by any reasonable measure.
 * The maintainers don´t work actively with the main wireguard C/Linux maintainers.
 
