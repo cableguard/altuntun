@@ -33,7 +33,7 @@ Most dependencies have been updated except:
 ## License
 
 The project is licensed under the 3-Clause BSD License.
-More information may be found at [WireGuard.com](https://www.wireguard.com/).**
+More information may be found at [WireGuard.com](https://www.wireguard.com/).
 
 ### Contribution
 
