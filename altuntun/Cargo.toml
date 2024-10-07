@@ -56,6 +56,7 @@ sha2 = "0.10.7"
 trust-dns-resolver = "0.23.0"
 chrono = "0.4.38"
 regex = "1.9.5"
+atomic-shim = "0.2.0"
 
 [target.'cfg(unix)'.dependencies]
 nix = { version = "0.27.1", default-features = false, features = [
